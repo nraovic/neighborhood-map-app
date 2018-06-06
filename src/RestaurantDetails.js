@@ -74,20 +74,7 @@ export default class MapContainer extends Component {
       // in our return function you must return a div with ref='map' and style.
       <div className="container">
         <div className="search-container">
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Seach for a cafe"
-            value={this.state.query}
-            onChange={this.updateQuery}
-          />
-          <ul className="search-results">
-            {matchedResults.map(result => (
-              <li>
-                <Link to="/details">{result.name}</Link>
-              </li>
-            ))}
-          </ul>
+          <Link to="/">Go to results</Link>
           {/*and here its without the bracets */}
         </div>
         <div className="map-container">
