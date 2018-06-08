@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
 import { getData } from './Api/yelpApi.js';
 import escapeRegExp from 'escape-string-regexp';
+import SearchBar from './SearchBar.js';
+import RestaurantDetails from './RestaurantDetails.js';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 export default class MapContainer extends Component {
   // ======================
@@ -72,46 +74,43 @@ export default class MapContainer extends Component {
     const matchedResults = this.getMatchedResults();
     return (
       // in our return function you must return a div with ref='map' and style.
-      <div className="container">
-        <div className="search-container">
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Seach for a cafe"
-            value={this.state.query}
-            onChange={this.updateQuery}
-          />
-          <ul className="search-results">
-            {matchedResults.map(result => (
-              <li>
-                <Link to="/details">{result.name}</Link>
-              </li>
-            ))}
-          </ul>
-          {/*and here its without the bracets */}
-        </div>
-        <div className="map-container">
-          <div>
-            {matchedResults.map(result => {
-              // iterate through locations saved in state
-              const marker = new google.maps.Marker({
-                // creates a new Google maps Marker object.
-                position: { lat: result.location.lat, lng: result.location.lng },
-                map: this.map,
-                title: result.name
-              }); // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
-              this.markers.push(marker);
-              var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
-              marker.addListener('click', function() {
-                infowindow.open(this.map, marker);
-              });
-            })}
+      <Router>
+        <div className="container">
+          <div className="search-container">
+            <input
+              className="search-input"
+              type="text"
+              placeholder="Seach for a cafe"
+              value={this.state.query}
+              onChange={this.updateQuery}
+            />
+            <Route exact path="/" render={() => <SearchBar matchedResults={this.getMatchedResults} />} />
+            <Route exact path="/details" render={() => <RestaurantDetails />} />
+            {/*and here its without the bracets */}
           </div>
-          <div className="map" ref="map" style={style}>
-            loading map...
+          <div className="map-container">
+            <div>
+              {matchedResults.map(result => {
+                // iterate through locations saved in state
+                const marker = new google.maps.Marker({
+                  // creates a new Google maps Marker object.
+                  position: { lat: result.location.lat, lng: result.location.lng },
+                  map: this.map,
+                  title: result.name
+                }); // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
+                this.markers.push(marker);
+                var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
+                marker.addListener('click', function() {
+                  infowindow.open(this.map, marker);
+                });
+              })}
+            </div>
+            <div className="map" ref="map" style={style}>
+              loading map...
+            </div>
           </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }

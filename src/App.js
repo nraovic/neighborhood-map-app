@@ -5,14 +5,14 @@ import './App.css';
 import { GoogleApiWrapper } from 'google-maps-react';
 // import child component
 import MapContainer from './MapContainer';
+import SearchBar from './SearchBar.js';
 import RestaurantDetails from './RestaurantDetails';
 class App extends Component {
   render() {
     const title = "Valby Cafe's";
     return (
       <div>
-        <Route exact path="/" render={() => <MapContainer google={this.props.google} />} />
-        <Route exact path="/details" render={() => <RestaurantDetails google={this.props.google} />} />
+        <MapContainer google={this.props.google} />
       </div>
     );
   }
