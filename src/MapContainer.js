@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom';
-import { getData } from './Api/yelpApi.js';
+import { getData, getCafeDetails } from './Api/yelpApi.js';
 import escapeRegExp from 'escape-string-regexp';
 import SearchBar from './SearchBar.js';
 import RestaurantDetails from './RestaurantDetails.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { get } from 'https';
 
 export default class MapContainer extends Component {
   // ======================
@@ -13,7 +14,9 @@ export default class MapContainer extends Component {
   // ======================
   state = {
     results: [],
-    query: ''
+    cafesDetails: [],
+    query: '',
+    id: ''
   };
   markers = [];
   componentDidMount() {
@@ -37,7 +40,9 @@ export default class MapContainer extends Component {
       // ADD MARKERS TO MAP
       // ==================
       getData().then(results => {
-        this.setState({ results: results });
+        this.setState({
+          results
+        });
       });
     }
   }
@@ -58,6 +63,10 @@ export default class MapContainer extends Component {
       query: query
     });
   };
+  updateID = id => {
+    this.setState({ id });
+    console.log(id);
+  };
   render() {
     const style = {
       // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
@@ -76,6 +85,7 @@ export default class MapContainer extends Component {
       // in our return function you must return a div with ref='map' and style.
       <Router>
         <div className="container">
+          {console.log(this.state.query)}
           <div className="search-container">
             <input
               className="search-input"
@@ -84,8 +94,12 @@ export default class MapContainer extends Component {
               value={this.state.query}
               onChange={this.updateQuery}
             />
-            <Route exact path="/" render={() => <SearchBar matchedResults={this.getMatchedResults} />} />
-            <Route exact path="/details" render={() => <RestaurantDetails />} />
+            <Route
+              exact
+              path="/"
+              render={() => <SearchBar updateID={this.updateID} matchedResults={this.getMatchedResults} />}
+            />
+            <Route path={`/details`} render={() => <RestaurantDetails idUrl={this.state.id} />} />
             {/*and here its without the bracets */}
           </div>
           <div className="map-container">
