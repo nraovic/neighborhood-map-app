@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom';
+import update from 'immutability-helper';
 import { getData, getCafeDetails } from './Api/yelpApi.js';
 import escapeRegExp from 'escape-string-regexp';
 import SearchBar from './SearchBar.js';
@@ -14,9 +15,9 @@ export default class MapContainer extends Component {
   // ======================
   state = {
     results: [],
-    cafesDetails: [],
     query: '',
-    id: ''
+    id: '',
+    cafesDetails: {}
   };
   markers = [];
   componentDidMount() {
@@ -67,6 +68,16 @@ export default class MapContainer extends Component {
     this.setState({ id });
     console.log(id);
   };
+  updateCafesDetails = () => {
+    if (!(this.state.id in this.state.cafesDetails)) {
+      getCafeDetails(this.state.id).then(results => {
+        const updatedDetails = Object.assign({}, this.state.cafesDetails);
+        updatedDetails[this.state.id] = results;
+        console.log(updatedDetails);
+        this.setState({ cafesDetails: updatedDetails });
+      });
+    }
+  };
   render() {
     const style = {
       // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
@@ -99,7 +110,16 @@ export default class MapContainer extends Component {
               path="/"
               render={() => <SearchBar updateID={this.updateID} matchedResults={this.getMatchedResults} />}
             />
-            <Route path={`/details`} render={() => <RestaurantDetails idUrl={this.state.id} />} />
+            <Route
+              path={`/details`}
+              render={() => (
+                <RestaurantDetails
+                  idUrl={this.state.id}
+                  cafesDetails={this.state.cafesDetails}
+                  updateCafesDetails={this.updateCafesDetails}
+                />
+              )}
+            />
             {/*and here its without the bracets */}
           </div>
           <div className="map-container">

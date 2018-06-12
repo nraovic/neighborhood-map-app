@@ -31,7 +31,7 @@ export const getCafeDetails = id => {
       }
     })
     .then(data => {
-      const venueDetails = data.response.venue;
+      const venueDetails = data.response;
       return venueDetails;
     });
 };
