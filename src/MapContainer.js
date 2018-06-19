@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import ReactDOM from 'react-dom';
-import update from 'immutability-helper';
 import { getData, getCafeDetails } from './Api/yelpApi.js';
 import escapeRegExp from 'escape-string-regexp';
 import SearchBar from './SearchBar.js';
 import RestaurantDetails from './RestaurantDetails.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { get } from 'https';
 
 export default class MapContainer extends Component {
   // ======================
@@ -19,7 +17,7 @@ export default class MapContainer extends Component {
     id: '',
     cafesDetails: {}
   };
-  markers = [];
+  //markers = [];
   componentDidMount() {
     this.loadMap(); // call loadMap function to load the google map
   }
@@ -32,15 +30,29 @@ export default class MapContainer extends Component {
 
       const mapRef = this.refs.map; // looks for HTML div ref 'map'. Returned in render below.
       const node = ReactDOM.findDOMNode(mapRef); // finds the 'map' div in the React DOM, names it node
-
-      const mapConfig = Object.assign({}, { center: { lat: 55.6617, lng: 12.5168 }, zoom: 13, mapTypeId: 'roadmap' }); // sets center of google map to NYC. // sets zoom. Lower numbers are zoomed further out. // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
+      const lat = 55.6837;
+      const lng = 12.5716;
+      const mapConfig = Object.assign({}, { center: { lat: lat, lng: lng }, zoom: 13, mapTypeId: 'roadmap' }); // sets center of google map to NYC. // sets zoom. Lower numbers are zoomed further out. // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
 
       this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
 
       // ==================
       // ADD MARKERS TO MAP
       // ==================
+      //Set state for the results that have
       getData().then(results => {
+        for (let result of results) {
+          result['marker'] = new google.maps.Marker({
+            // creates a new Google maps Marker object.
+            position: { lat: result.location.lat, lng: result.location.lng },
+            map: this.map,
+            title: result.name
+          });
+          result['infoWindow'] = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
+          result.marker.addListener('click', function() {
+            result.infoWindow.open(this.map, result.marker);
+          });
+        }
         this.setState({
           results
         });
@@ -64,9 +76,17 @@ export default class MapContainer extends Component {
       query: query
     });
   };
-  updateID = id => {
+  updateID = (id, cafe) => {
     this.setState({ id });
     console.log(id);
+    /*for (let marker of this.markers) {
+      console.log(marker.position.lat());
+      console.log(cafe.location.lat);
+      if (marker.position.lat() === cafe.location.lat) {
+        console.log(cafe);
+        marker.animation = this.props.google.maps.Animation.DROP;
+      }
+    }*/
   };
   updateCafesDetails = () => {
     if (!(this.state.id in this.state.cafesDetails)) {
@@ -87,10 +107,10 @@ export default class MapContainer extends Component {
     const maps = google.maps; // sets maps to google maps props
 
     //Clear the markers from the map
-    for (let marker of this.markers) {
+    /*for (let marker of this.markers) {
       marker.setMap(null);
     }
-    this.markers = [];
+    this.markers = [];*/
     const matchedResults = this.getMatchedResults();
     return (
       // in our return function you must return a div with ref='map' and style.
@@ -108,7 +128,7 @@ export default class MapContainer extends Component {
             <Route
               exact
               path="/"
-              render={() => <SearchBar updateID={this.updateID} matchedResults={this.getMatchedResults} />}
+              render={() => <SearchBar updateID={this.updateID} matchedResults={matchedResults} />}
             />
             <Route
               path={`/details`}
@@ -124,19 +144,18 @@ export default class MapContainer extends Component {
           </div>
           <div className="map-container">
             <div>
-              {matchedResults.map(result => {
+              {/*<Marker map={this.map} google={this.props.google} matchedResults={matchedResults} />*/}
+
+              {this.state.results.map(result => {
                 // iterate through locations saved in state
-                const marker = new google.maps.Marker({
-                  // creates a new Google maps Marker object.
-                  position: { lat: result.location.lat, lng: result.location.lng },
-                  map: this.map,
-                  title: result.name
-                }); // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
-                this.markers.push(marker);
-                var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
+                matchedResults.includes(result) ? result.marker.setVisible(true) : result.marker.setVisible(false);
+                console.log(result);
+                // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
+                /*var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
                 marker.addListener('click', function() {
                   infowindow.open(this.map, marker);
                 });
+                console.log(marker);*/
               })}
             </div>
             <div className="map" ref="map" style={style}>

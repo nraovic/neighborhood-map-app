@@ -9,10 +9,10 @@ export default class SearchBar extends Component {
     const { matchedResults, updateID } = this.props;
     return (
       <ul className="search-results">
-        {matchedResults().map(result => (
+        {matchedResults.map(result => (
           <li>
             {/*We need to bind this in order to refer to the scope of MapContainer*/}
-            <Link to={`details/${result.id}`} onClick={updateID.bind(this, result.id)}>
+            <Link to={`details/${result.id}`} onClick={updateID.bind(this, result.id, result)}>
               {result.name}
             </Link>
           </li>
