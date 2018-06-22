@@ -9,7 +9,6 @@ export default class RestaurantDetails extends Component {
   state = {
     cafesDetails: {}
   };
-
   updateCafesDetails = id => {
     if (!(id in this.state.cafesDetails)) {
       getCafeDetails(id).then(results => {
@@ -21,15 +20,15 @@ export default class RestaurantDetails extends Component {
     }
   };
   componentDidMount() {
-    const { idUrl } = this.props;
+    const { idUrl, redirect } = this.props;
     this.updateCafesDetails(idUrl);
   }
   render() {
     const { idUrl, getDetails } = this.props;
-    const photoStyle = {
-      maxWidth: '400px',
-      maxHeight: '400px'
-    };
+    const photoStyle = { maxWidth: '400px', maxHeight: '400px' };
+    const url = window.location.href;
+    const getIdfromUrl = url.substring(url.lastIndexOf('/') + 1);
+
     const photoUrl = url => {
       const photoUrl = `${this.state.cafesDetails[url].venue.bestPhoto.prefix}${
         this.state.cafesDetails[url].venue.bestPhoto.height

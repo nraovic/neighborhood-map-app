@@ -5,12 +5,14 @@
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/react-fontawesome": "0.0.20",
+    "create-react-ref": "^0.1.0",
     "escape-string-regexp": "^1.0.5",
     "google-map-react": "^1.0.3",
     "google-maps-react": "^1.1.0",
     "immutability-helper": "^2.7.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.13",
     "sort-by": "^1.2.0"

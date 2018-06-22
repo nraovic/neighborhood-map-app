@@ -4,8 +4,10 @@ export const getData = () => {
   const lat = 55.6837;
   const lng = 12.5716;
   const category = '4bf58dd8d48988d16d941735';
+  const clientID = 'KSYTULHQ5XLXG50K5QSS130TNGE2NI5101MA3UZEPYXFKWE0';
+  const clientSecret = 'XU4FTER2VWNJXAYBGWTJN120GFOWSJ3HYW2JGCQE0AE3W1M4';
   return fetch(
-    `https://api.foursquare.com/v2/venues/search?ll=${lat},${lng}&client_id=KSYTULHQ5XLXG50K5QSS130TNGE2NI5101MA3UZEPYXFKWE0&client_secret=RCZ5RJCKUGHPYDGUL2PZJYEVEWP5SEY2ZXUWB1RPJOMFEAXD&&v=20180518&categoryId=${category}&radius=1000&limit=50`
+    `https://api.foursquare.com/v2/venues/search?ll=${lat},${lng}&client_id=TAMFSSUQNJSMYX5LVDQV0SNKJ0JRIFSY0ZTHM4O3EUMPRASY&client_secret=JF5QH00NJSD02POAPXJFNQLOEXHXQQQTHSASAAKELFENSVXE&&v=20180518&categoryId=${category}&radius=1000&limit=50`
   )
     .then(response => {
       if (!response.ok) {
@@ -29,7 +31,7 @@ export const getCafeDetails = id => {
   const ID = id;
 
   return fetch(
-    `https://api.foursquare.com/v2/venues/${ID}?client_id=KSYTULHQ5XLXG50K5QSS130TNGE2NI5101MA3UZEPYXFKWE0&client_secret=RCZ5RJCKUGHPYDGUL2PZJYEVEWP5SEY2ZXUWB1RPJOMFEAXD&v=20180518`
+    `https://api.foursquare.com/v2/venues/${ID}?client_id=TAMFSSUQNJSMYX5LVDQV0SNKJ0JRIFSY0ZTHM4O3EUMPRASY&client_secret=JF5QH00NJSD02POAPXJFNQLOEXHXQQQTHSASAAKELFENSVXE&v=20180518`
   )
     .then(response => {
       if (!response.ok) {
