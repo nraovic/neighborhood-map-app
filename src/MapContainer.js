@@ -16,9 +16,10 @@ export default class MapContainer extends Component {
   state = {
     results: [],
     query: '',
-    id: '',
+    id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
     cafesDetails: {},
-    redirect: false
+    redirect: false,
+    animation: false
   };
   //markers = [];
   componentDidMount() {
@@ -45,17 +46,27 @@ export default class MapContainer extends Component {
       //Set state for the results that have
       getData().then(results => {
         for (let result of results) {
+          const image = { size: new google.maps.Size(20, 32) };
           result['marker'] = new google.maps.Marker({
             // creates a new Google maps Marker object.
             position: { lat: result.location.lat, lng: result.location.lng },
             map: this.map,
-            title: result.name,
-            //url: `/details/${result.id}`,
-            id: result.id
+            title: result.name, //url: `/details/${result.id}`,
+            id: result.id,
+            animation: null
           });
-          result['infoWindow'] = new google.maps.InfoWindow({
-            content: `<h3>${result.name}</h3>`
-          });
+          const animation = this.state.animation;
+          console.log(animation);
+          if (animation) {
+            if (result.marker.getAnimation() !== null) {
+              result.marker.setAnimation(null);
+            } else {
+              result.marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+            result['infoWindow'] = new google.maps.InfoWindow({
+              content: `<h3>${result.name}</h3>`
+            });
+          }
           result.marker.addListener('click', this.markerClick.bind(this, result.id), false);
           //   // result.infoWindow.open(this.map, result.marker);
           //   //this.update(result.id, result);
@@ -68,7 +79,6 @@ export default class MapContainer extends Component {
       });
     }
   }
-  id;
 
   markerClick(id) {
     this.setState({ redirect: true, id: id });
@@ -90,10 +100,26 @@ export default class MapContainer extends Component {
       query: query
     });
   };
+  bounceMarker = cafe => {
+    const google = this.props.google;
+    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+  };
+  endBounce = cafe => {
+    const google = this.props;
+    cafe.marker.setAnimation(null);
+  };
   updateID = (id, cafe) => {
-    this.setState({ id });
-    console.log(id);
-    return id;
+    this.setState({ id: id, animation: true });
+    const google = this.props.google;
+    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function() {
+      cafe.marker.setAnimation(null);
+    }, 1500);
+    /*if (cafe.marker.getAnimation() !== null) {
+      cafe.marker.setAnimation(null);
+    } else {
+      cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+    }*/
     /*for (let marker of this.markers) {
       console.log(marker.position.lat());
       console.log(cafe.location.lat);
@@ -153,7 +179,15 @@ export default class MapContainer extends Component {
             <Route
               exact
               path="/"
-              render={() => <SearchBar updateID={this.updateID} matchedResults={matchedResults} />}
+              render={() => (
+                <SearchBar
+                  updateID={this.updateID}
+                  google={this.props.google}
+                  stopBounce={this.endBounce}
+                  markerBounce={this.bounceMarker}
+                  matchedResults={matchedResults}
+                />
+              )}
             />
             {this.renderRedirect()}
             <Route
@@ -163,6 +197,7 @@ export default class MapContainer extends Component {
                   idUrl={this.state.id}
                   redirect={this.state.redirect}
                   cafesDetails={this.state.cafesDetails}
+                  updateID={this.updateID}
                   updateCafesDetails={this.updateCafesDetails}
                 />
               )}

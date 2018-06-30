@@ -6,14 +6,19 @@ import { getCafeDetails } from './Api/yelpApi';
 
 export default class SearchBar extends Component {
   render() {
-    const { matchedResults, updateID } = this.props;
+    const { google, matchedResults, updateID, markerBounce, stopBounce } = this.props;
     return (
       <div>
         <ul className="search-results">
           {matchedResults.map(result => (
             <li>
               {/*We need to bind this in order to refer to the scope of MapContainer*/}
-              <Link to={`details/${result.id}`} onClick={updateID.bind(this, result.id, result)}>
+              <Link
+                to={`details/${result.id}`}
+                onClick={updateID.bind(this, result.id, result)}
+                onMouseEnter={markerBounce.bind(this, result)}
+                onMouseLeave={stopBounce.bind(this, result)}
+              >
                 {result.name}
               </Link>
             </li>
