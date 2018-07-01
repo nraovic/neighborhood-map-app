@@ -95,7 +95,8 @@ export default class MapContainer extends Component {
     return showingResults;
   };
   updateQuery = event => {
-    const query = event.target.value;
+    event.preventDefault();
+    const query = event.target[0].value;
     this.setState({
       query: query
     });
@@ -169,13 +170,10 @@ export default class MapContainer extends Component {
         <div className="container">
           {console.log(this.state.query)}
           <div className="search-container">
-            <input
-              className="search-input"
-              type="text"
-              placeholder="Seach for a cafe"
-              value={this.state.query}
-              onChange={this.updateQuery}
-            />
+            <form onSubmit={this.updateQuery} value={this.state.query}>
+              <input className="search-input" type="text" placeholder="Seach for a cafe" />
+              <button type="submit">Filter</button>
+            </form>
             <Route
               exact
               path="/"
