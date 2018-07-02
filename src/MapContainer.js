@@ -67,6 +67,9 @@ export default class MapContainer extends Component {
               content: `<h3>${result.name}</h3>`
             });
           }
+          /*result['infoWindow'] = new google.maps.InfoWindow({
+            content: `<h3>${result.name}</h3>`
+          });*/
           result.marker.addListener('click', this.markerClick.bind(this, result.id), false);
           //   // result.infoWindow.open(this.map, result.marker);
           //   //this.update(result.id, result);
@@ -116,6 +119,7 @@ export default class MapContainer extends Component {
     setTimeout(function() {
       cafe.marker.setAnimation(null);
     }, 1500);
+    //cafe.infoWindow.open(this.map, cafe.marker);
     /*if (cafe.marker.getAnimation() !== null) {
       cafe.marker.setAnimation(null);
     } else {
@@ -170,10 +174,6 @@ export default class MapContainer extends Component {
         <div className="container">
           {console.log(this.state.query)}
           <div className="search-container">
-            <form onSubmit={this.updateQuery} value={this.state.query}>
-              <input className="search-input" type="text" placeholder="Seach for a cafe" />
-              <button type="submit">Filter</button>
-            </form>
             <Route
               exact
               path="/"
@@ -184,6 +184,7 @@ export default class MapContainer extends Component {
                   stopBounce={this.endBounce}
                   markerBounce={this.bounceMarker}
                   matchedResults={matchedResults}
+                  updateQuery={this.updateQuery}
                 />
               )}
             />

@@ -6,9 +6,13 @@ import { getCafeDetails } from './Api/yelpApi';
 
 export default class SearchBar extends Component {
   render() {
-    const { google, matchedResults, updateID, markerBounce, stopBounce } = this.props;
+    const { google, updateQuery, matchedResults, updateID, markerBounce, stopBounce } = this.props;
     return (
       <div>
+        <form onSubmit={updateQuery} >
+          <input className="search-input" type="text" placeholder="Seach for a cafe" />
+          <button type="submit">Filter</button>
+        </form>
         <ul className="search-results">
           {matchedResults.map(result => (
             <li>
