@@ -24,6 +24,7 @@
 
 .container {
   display: flex;
+  flex-wrap: wrap;
 }
 .search-container {
   width: 30%;
@@ -43,4 +44,35 @@
 
 #map {
   height: 100%;
+}
+
+.menuToggle,
+.title {
+  display: inline;
+}
+
+.menuToggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menuToggle {
+    display: inline;
+  }
+  .map-container {
+    width: 100%;
+  }
+  .search-container {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  .toggle {
+    width: 300px
+  }
 }

@@ -8,6 +8,8 @@ import RestaurantDetails from './RestaurantDetails.js';
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import { createRef } from 'create-react-ref';
 import { Redirect } from 'react-router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 export default class MapContainer extends Component {
   // ======================
@@ -19,7 +21,8 @@ export default class MapContainer extends Component {
     id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
     cafesDetails: {},
     redirect: false,
-    animation: false
+    animation: false,
+    toggle: false
   };
   //markers = [];
   componentDidMount() {
@@ -85,6 +88,7 @@ export default class MapContainer extends Component {
 
   markerClick(id) {
     this.setState({ redirect: true, id: id });
+    this.clickToggle()
   }
 
   getMatchedResults = () => {
@@ -150,6 +154,10 @@ export default class MapContainer extends Component {
       // <Router path="/details" render={() => <Redirect push to={`/details/${this.state.id}`} />} />;
     }
   };
+  clickToggle = () => {
+    const currentState = this.state.toggle;
+    this.setState({ toggle: !currentState });
+  };
   render() {
     const url = window.location.href;
     console.log(url);
@@ -171,62 +179,67 @@ export default class MapContainer extends Component {
     return (
       // in our return function you must return a div with ref='map' and style.
       <Router>
-        <div className="container">
-          {console.log(this.state.query)}
-          <div className="search-container">
-            <Route
-              exact
-              path="/"
-              render={() => (
-                <SearchBar
-                  updateID={this.updateID}
-                  google={this.props.google}
-                  stopBounce={this.endBounce}
-                  markerBounce={this.bounceMarker}
-                  matchedResults={matchedResults}
-                  updateQuery={this.updateQuery}
-                />
-              )}
-            />
-            {this.renderRedirect()}
-            <Route
-              path={`/details/${this.state.id}`}
-              render={() => (
-                <RestaurantDetails
-                  idUrl={this.state.id}
-                  redirect={this.state.redirect}
-                  cafesDetails={this.state.cafesDetails}
-                  updateID={this.updateID}
-                  updateCafesDetails={this.updateCafesDetails}
-                />
-              )}
-            />
-
-            {/*and here its without the bracets */}
+        <div>
+          <div className="title-container">
+            <button className="menuToggle" onClick={this.clickToggle}><FontAwesomeIcon icon={faBars} /></button>
+            <h1 className="title">Kbh Cafes</h1>
           </div>
-          <div className="map-container">
-            <div>
-              {this.state.results.map(result => {
-                // iterate through locations saved in state
-                matchedResults.includes(result) ? result.marker.setVisible(true) : result.marker.setVisible(false);
-                console.log(result);
-                /*<Link to={`details/${result.id}`} onClick={this.updateID.bind(this, result.id, result)}>
+          <div className="container">
+            <div className={this.state.toggle ? 'search-container toggle' : 'search-container'}>
+              <Route
+                exact
+                path="/"
+                render={() => (
+                  <SearchBar
+                    updateID={this.updateID}
+                    google={this.props.google}
+                    stopBounce={this.endBounce}
+                    markerBounce={this.bounceMarker}
+                    matchedResults={matchedResults}
+                    updateQuery={this.updateQuery}
+                  />
+                )}
+              />
+              {this.renderRedirect()}
+              <Route
+                path={`/details/${this.state.id}`}
+                render={() => (
+                  <RestaurantDetails
+                    idUrl={this.state.id}
+                    redirect={this.state.redirect}
+                    cafesDetails={this.state.cafesDetails}
+                    updateID={this.updateID}
+                    updateCafesDetails={this.updateCafesDetails}
+                  />
+                )}
+              />
+
+              {/*and here its without the bracets */}
+            </div>
+            <div className="map-container">
+              <div>
+                {this.state.results.map(result => {
+                  // iterate through locations saved in state
+                  matchedResults.includes(result) ? result.marker.setVisible(true) : result.marker.setVisible(false);
+                  console.log(result);
+                  /*<Link to={`details/${result.id}`} onClick={this.updateID.bind(this, result.id, result)}>
                   result.marker
                 </Link>;*/
-                /*result.marker.addListener('click', function() {
+                  /*result.marker.addListener('click', function() {
                   this.updateID(result.id, result);
                   window.location.href = this.url;
                 });*/
-                // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
-                /*var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
+                  // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
+                  /*var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
                 marker.addListener('click', function() {
                   infowindow.open(this.map, marker);
                 });
                 console.log(marker);*/
-              })}
-            </div>
-            <div className="map" ref="map" style={style}>
-              loading map...
+                })}
+              </div>
+              <div className="map" ref="map" style={style}>
+                loading map...
+              </div>
             </div>
           </div>
         </div>
