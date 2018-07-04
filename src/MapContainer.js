@@ -12,19 +12,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 export default class MapContainer extends Component {
-  // ======================
-  // ADD LOCATIONS TO STATE
-  // ======================
   state = {
-    results: [],
-    query: '',
-    id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1),
-    cafesDetails: {},
-    redirect: false,
-    animation: false,
-    toggle: false
+    results: [], // List of cafes' objects
+    query: '', // User's input from the Filter field
+    id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1), // Cafe's ID, initially obtained from the window location so that the Details page can be directly loaded (and not only from the Main page)
+    cafesDetails: {}, // Key-value pairs of each of the cafes IDs and its detailed data
+    redirect: false, // Redirect to the Deails page?
+    toggle: false // Toggle the search results?
   };
-  //markers = [];
   componentDidMount() {
     this.loadMap(); // call loadMap function to load the google map
   }
@@ -34,7 +29,6 @@ export default class MapContainer extends Component {
       // checks to make sure that props have been passed
       const { google } = this.props; // sets props equal to google
       const maps = google.maps; // sets maps to google maps props
-
       const mapRef = this.refs.map; // looks for HTML div ref 'map'. Returned in render below.
       const node = ReactDOM.findDOMNode(mapRef); // finds the 'map' div in the React DOM, names it node
       const lat = 55.6837;
@@ -43,42 +37,28 @@ export default class MapContainer extends Component {
 
       this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
 
-      // ==================
-      // ADD MARKERS TO MAP
-      // ==================
-      //Set state for the results that have
+      // Get the cafes data and add markers to the map for each cafe
       getData().then(results => {
         for (let result of results) {
           const image = { size: new google.maps.Size(20, 32) };
+          // Creates a new Google maps Marker object
           result['marker'] = new google.maps.Marker({
-            // creates a new Google maps Marker object.
             position: { lat: result.location.lat, lng: result.location.lng },
             map: this.map,
-            title: result.name, //url: `/details/${result.id}`,
-            id: result.id,
-            animation: null
+            title: result.name,
+            id: result.id
           });
-          const animation = this.state.animation;
-          console.log(animation);
-          if (animation) {
-            if (result.marker.getAnimation() !== null) {
-              result.marker.setAnimation(null);
-            } else {
-              result.marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
-            result['infoWindow'] = new google.maps.InfoWindow({
-              content: `<h3>${result.name}</h3>`
-            });
-          }
           /*result['infoWindow'] = new google.maps.InfoWindow({
             content: `<h3>${result.name}</h3>`
           });*/
+
           result.marker.addListener('click', this.markerClick.bind(this, result.id), false);
           //   // result.infoWindow.open(this.map, result.marker);
           //   //this.update(result.id, result);
           //   //window.location.href = `/details/${result.id}`;
           // });
         }
+        //Set the state for the results when data received
         this.setState({
           results
         });
@@ -88,9 +68,10 @@ export default class MapContainer extends Component {
 
   markerClick(id) {
     this.setState({ redirect: true, id: id });
-    this.clickToggle()
+    this.clickToggle();
   }
 
+  // Get the results that match the user's search query
   getMatchedResults = () => {
     let showingResults;
     if (this.state.query) {
@@ -103,41 +84,22 @@ export default class MapContainer extends Component {
   };
   updateQuery = event => {
     event.preventDefault();
-    const query = event.target[0].value;
+    const query = event.target[0].value; // The target is the form, and query is its the first element
     this.setState({
       query: query
     });
   };
-  bounceMarker = cafe => {
-    const google = this.props.google;
-    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
-  };
-  endBounce = cafe => {
-    const google = this.props;
-    cafe.marker.setAnimation(null);
-  };
-  updateID = (id, cafe) => {
-    this.setState({ id: id, animation: true });
+
+  // Update id and add bounce on link click for 1500ms
+  cafeLinkClick = (id, cafe) => {
+    this.setState({ id });
     const google = this.props.google;
     cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function() {
       cafe.marker.setAnimation(null);
     }, 1500);
-    //cafe.infoWindow.open(this.map, cafe.marker);
-    /*if (cafe.marker.getAnimation() !== null) {
-      cafe.marker.setAnimation(null);
-    } else {
-      cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
-    }*/
-    /*for (let marker of this.markers) {
-      console.log(marker.position.lat());
-      console.log(cafe.location.lat);
-      if (marker.position.lat() === cafe.location.lat) {
-        console.log(cafe);
-        marker.animation = this.props.google.maps.Animation.DROP;
-      }
-    }*/
   };
+  //Get cafe's details if not already in this.state.cafeDetails
   updateCafesDetails = () => {
     if (!(this.state.id in this.state.cafesDetails)) {
       getCafeDetails(this.state.id).then(results => {
@@ -148,15 +110,25 @@ export default class MapContainer extends Component {
       });
     }
   };
+  // Redirect to Details page
   renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect from={`/details/${this.state.id}`} push to={`/details/${this.state.id}`} />;
       // <Router path="/details" render={() => <Redirect push to={`/details/${this.state.id}`} />} />;
     }
   };
+
   clickToggle = () => {
     const currentState = this.state.toggle;
     this.setState({ toggle: !currentState });
+  };
+  startBounce = cafe => {
+    const google = this.props.google;
+    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+  };
+  endBounce = cafe => {
+    const google = this.props;
+    cafe.marker.setAnimation(null);
   };
   render() {
     const url = window.location.href;
@@ -164,43 +136,42 @@ export default class MapContainer extends Component {
     console.log(url.substring(url.lastIndexOf('/') + 1));
 
     const style = {
-      // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
-      height: '100vh' // 75vh similarly will take up roughly 75% of the height of the screen. px also works.
+      // MUST specify dimensions of the Google map
+      height: '100vh'
     };
-    const { google } = this.props; // sets props equal to google
-    const maps = google.maps; // sets maps to google maps props
-
-    //Clear the markers from the map
-    /*for (let marker of this.markers) {
-      marker.setMap(null);
-    }
-    this.markers = [];*/
+    const { google } = this.props;
+    const maps = google.maps;
     const matchedResults = this.getMatchedResults();
     return (
       // in our return function you must return a div with ref='map' and style.
+      //Wrap the DOM in Router
       <Router>
-        <div>
+        <div className="main-page">
           <div className="title-container">
-            <button className="menuToggle" onClick={this.clickToggle}><FontAwesomeIcon icon={faBars} /></button>
+            <button className="hamburger-btn" onClick={this.clickToggle}>
+              <FontAwesomeIcon icon={faBars} />
+            </button>
             <h1 className="title">Kbh Cafes</h1>
           </div>
-          <div className="container">
+          <div className="main-container">
             <div className={this.state.toggle ? 'search-container toggle' : 'search-container'}>
+              {/* Add Route to the Search Bar with the same path as the main page */}
               <Route
                 exact
                 path="/"
                 render={() => (
                   <SearchBar
-                    updateID={this.updateID}
+                    cafeLinkClick={this.cafeLinkClick}
                     google={this.props.google}
                     stopBounce={this.endBounce}
-                    markerBounce={this.bounceMarker}
+                    startBounce={this.startBounce}
                     matchedResults={matchedResults}
                     updateQuery={this.updateQuery}
                   />
                 )}
               />
               {this.renderRedirect()}
+              {/* Add Route to the Details Bar with the details path */}
               <Route
                 path={`/details/${this.state.id}`}
                 render={() => (
@@ -208,33 +179,17 @@ export default class MapContainer extends Component {
                     idUrl={this.state.id}
                     redirect={this.state.redirect}
                     cafesDetails={this.state.cafesDetails}
-                    updateID={this.updateID}
+                    cafeLinkClick={this.cafeLinkClick}
                     updateCafesDetails={this.updateCafesDetails}
                   />
                 )}
               />
-
-              {/*and here its without the bracets */}
             </div>
             <div className="map-container">
               <div>
                 {this.state.results.map(result => {
-                  // iterate through locations saved in state
                   matchedResults.includes(result) ? result.marker.setVisible(true) : result.marker.setVisible(false);
                   console.log(result);
-                  /*<Link to={`details/${result.id}`} onClick={this.updateID.bind(this, result.id, result)}>
-                  result.marker
-                </Link>;*/
-                  /*result.marker.addListener('click', function() {
-                  this.updateID(result.id, result);
-                  window.location.href = this.url;
-                });*/
-                  // sets position of marker to specified location // sets markers to appear on the map we just created on line 35 // the title of the marker is set to the name of the location
-                  /*var infowindow = new google.maps.InfoWindow({ content: `<h3>${result.name}</h3>` });
-                marker.addListener('click', function() {
-                  infowindow.open(this.map, marker);
-                });
-                console.log(marker);*/
                 })}
               </div>
               <div className="map" ref="map" style={style}>

@@ -6,10 +6,10 @@ import { getCafeDetails } from './Api/yelpApi';
 
 export default class SearchBar extends Component {
   render() {
-    const { google, updateQuery, matchedResults, updateID, markerBounce, stopBounce } = this.props;
+    const { google, updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
     return (
       <div>
-        <form onSubmit={updateQuery} >
+        <form onSubmit={updateQuery}>
           <input className="search-input" type="text" placeholder="Seach for a cafe" />
           <button type="submit">Filter</button>
         </form>
@@ -19,8 +19,8 @@ export default class SearchBar extends Component {
               {/*We need to bind this in order to refer to the scope of MapContainer*/}
               <Link
                 to={`details/${result.id}`}
-                onClick={updateID.bind(this, result.id, result)}
-                onMouseEnter={markerBounce.bind(this, result)}
+                onClick={cafeLinkClick.bind(this, result.id, result)}
+                onMouseEnter={startBounce.bind(this, result)}
                 onMouseLeave={stopBounce.bind(this, result)}
               >
                 {result.name}
@@ -32,7 +32,7 @@ export default class SearchBar extends Component {
           // {matchedResults.map(result => {
           //   result.marker.addListener('click', function() {
           //     <li>
-          //       <Link to={`details/${result.id}`} onClick={updateID.bind(this, result.id, result)}>
+          //       <Link to={`details/${result.id}`} onClick={cafeLinkClick.bind(this, result.id, result)}>
           //         {result.marker}
           //       </Link>
           //     </li>;

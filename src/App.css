@@ -22,7 +22,7 @@
   font-size: large;
 }
 
-.container {
+.main-container {
   display: flex;
   flex-wrap: wrap;
 }
@@ -46,17 +46,17 @@
   height: 100%;
 }
 
-.menuToggle,
+.hamburger-btn,
 .title {
   display: inline;
 }
 
-.menuToggle {
+.hamburger-btn {
   display: none;
 }
 
 @media (max-width: 768px) {
-  .menuToggle {
+  .hamburger-btn {
     display: inline;
   }
   .map-container {
@@ -66,7 +66,7 @@
     height: 100%;
     width: 300px;
     position: fixed;
-    left:-400px;
+    left: -400px;
     z-index: 1;
     background-color: white;
     overflow-x: hidden;
