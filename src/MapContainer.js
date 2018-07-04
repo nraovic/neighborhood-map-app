@@ -65,7 +65,7 @@ export default class MapContainer extends Component {
       });
     }
   }
-
+  // Redirect to Details page on a marker click and toggle the Details if the screen is small
   markerClick(id) {
     this.setState({ redirect: true, id: id });
     this.clickToggle();
@@ -113,7 +113,7 @@ export default class MapContainer extends Component {
   // Redirect to Details page
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect from={`/details/${this.state.id}`} push to={`/details/${this.state.id}`} />;
+      return <Redirect from={`/`} push to={`/details/${this.state.id}`} />;
       // <Router path="/details" render={() => <Redirect push to={`/details/${this.state.id}`} />} />;
     }
   };
@@ -170,6 +170,7 @@ export default class MapContainer extends Component {
                   />
                 )}
               />
+              {/* The page redirects and shows the Details page on a marker click */}
               {this.renderRedirect()}
               {/* Add Route to the Details Bar with the details path */}
               <Route
@@ -187,6 +188,7 @@ export default class MapContainer extends Component {
             </div>
             <div className="map-container">
               <div>
+                {/* For each result, set it to visible if it's contained in the matchedResults*/}
                 {this.state.results.map(result => {
                   matchedResults.includes(result) ? result.marker.setVisible(true) : result.marker.setVisible(false);
                   console.log(result);
