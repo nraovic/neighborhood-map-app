@@ -18,7 +18,9 @@ export default class MapContainer extends Component {
     id: window.location.href.substring(window.location.href.lastIndexOf('/') + 1), // Cafe's ID, initially obtained from the window location so that the Details page can be directly loaded (and not only from the Main page)
     cafesDetails: {}, // Key-value pairs of each of the cafes IDs and its detailed data
     redirect: false, // Redirect to the Deails page?
-    toggle: false // Toggle the search results?
+    toggle: false, // Toggle the search results?
+    apiRequestFailed: false,
+    detailsApiRequestFailed: false
   };
   componentDidMount() {
     this.loadMap(); // call loadMap function to load the google map
@@ -62,7 +64,8 @@ export default class MapContainer extends Component {
         this.setState({
           results
         });
-      });
+      })
+      .catch(err => {this.setState({apiRequestFailed : true})}) // Resolve the reject from Foursquare API
     }
   }
   // Redirect to Details page on a marker click and toggle the Details if the screen is small
@@ -107,7 +110,10 @@ export default class MapContainer extends Component {
         updatedDetails[this.state.id] = results;
         console.log(updatedDetails);
         this.setState({ cafesDetails: updatedDetails });
-      });
+      })
+      .catch(err => {
+        this.setState({ detailsApiRequestFailed: true }) // Resolve the reject from Foursquare API
+      })
     }
   };
   // Redirect to Details page
@@ -152,6 +158,8 @@ export default class MapContainer extends Component {
               <FontAwesomeIcon icon={faBars} />
             </button>
             <h1 className="title">Kbh Cafes</h1>
+            {/*Handle a fail from Foursquare API*/}
+            {(this.state.apiRequestFailed) && <div>We are sorry. The API request to Foursquare has failed. Please try again later.</div>}
           </div>
           <div className="main-container">
             <div className={this.state.toggle ? 'search-container toggle' : 'search-container'}>
@@ -182,6 +190,7 @@ export default class MapContainer extends Component {
                     cafesDetails={this.state.cafesDetails}
                     cafeLinkClick={this.cafeLinkClick}
                     updateCafesDetails={this.updateCafesDetails}
+                    apiRequest={this.state.detailsApiRequestFailed}
                   />
                 )}
               />

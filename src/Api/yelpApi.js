@@ -1,3 +1,5 @@
+// The data about the cafes and their details have been obtained from Foursquare
+
 // Get data about all cafes in the area
 import sortBy from 'sort-by';
 const lat = 55.6837;
@@ -18,7 +20,6 @@ export const getData = () => {
   */
     .then(response => {
       if (!response.ok) {
-        window.alert('Sorry, data is not available at the moment')
         throw response; //Upload the rest of the app without the data
       } else {
         return response.json();
@@ -37,9 +38,7 @@ export const getData = () => {
 //Get details about each cafe
 export const getCafeDetails = id => {
   const ID = id;
-  return fetch(
-    `https://api.foursquare.com/v2/venues/${ID}?client_id=${clientID}&client_secret=${clientSecret}&v=${version}`
-  )
+  return fetch(`https://api.foursquare.com/v2/venues/${ID}?client_id=${clientID}&client_secret=${clientSecret}&v=${version}`)
     .then(response => {
       if (!response.ok) {
         throw response;

@@ -13,7 +13,7 @@ export default class RestaurantDetails extends Component {
     updateCafesDetails(idUrl);
   }
   render() {
-    const { idUrl, getDetails, cafesDetails } = this.props;
+    const { idUrl, getDetails, cafesDetails, apiRequest } = this.props;
     const photoStyle = { maxWidth: '400px', maxHeight: '400px' };
     const url = window.location.href;
     const getIdfromUrl = url.substring(url.lastIndexOf('/') + 1);
@@ -27,6 +27,10 @@ export default class RestaurantDetails extends Component {
     return (
       <div>
         <Link to="/">Go to results</Link>
+        {/*Handle a fail from Foursquare API*/}
+        {apiRequest && (
+          <div>We are sorry. We could not get the data about the Cafe from Foursquare. Please try again later.</div>
+        )}
         {idUrl in cafesDetails && (
           <div>
             <h2>{cafesDetails[idUrl].venue.name}</h2>
