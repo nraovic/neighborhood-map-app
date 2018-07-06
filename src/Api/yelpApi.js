@@ -14,10 +14,6 @@ export const getData = () => {
   return fetch(
     `https://api.foursquare.com/v2/venues/search?ll=${lat},${lng}&client_id=${clientID}&client_secret=${clientSecret}&&v=${version}&categoryId=${category}&radius=${radius}&limit=${limit}`
   )
-  /* If without throw response, the first then would resolve(with ok status set to false) but the second then would fail on line 25
-     If throw response, the second or any later then would not fullfil, so the app would upload but without results
-     If throw response AND catch, the catch would resolve and the page would not upload
-  */
     .then(response => {
       if (!response.ok) {
         throw response; //Upload the rest of the app without the data
