@@ -7,6 +7,8 @@ import { getCafeDetails } from './Api/yelpApi';
 export default class SearchBar extends Component {
   render() {
     const { google, updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
+    const matched = matchedResults();
+    console.log(matched)
     return (
       <div>
         <form onSubmit={updateQuery}>
@@ -14,7 +16,7 @@ export default class SearchBar extends Component {
           <button type="submit">Filter</button>
         </form>
         <ul className="search-results">
-          {matchedResults.map(result => (
+          {matched.map(result => (
             <li>
               {/*We need to bind this in order to refer to the scope of MapContainer*/}
               <Link

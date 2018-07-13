@@ -40,38 +40,43 @@ export default class MapContainer extends Component {
       this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
 
       // Get the cafes data and add markers to the map for each cafe
-      getData().then(results => {
-        for (let result of results) {
-          const image = { size: new google.maps.Size(20, 32) };
-          // Creates a new Google maps Marker object
-          result['marker'] = new google.maps.Marker({
-            position: { lat: result.location.lat, lng: result.location.lng },
-            map: this.map,
-            title: result.name,
-            id: result.id
-          });
-          /*result['infoWindow'] = new google.maps.InfoWindow({
+      getData()
+        .then(results => {
+          for (let result of results) {
+            const image = { size: new google.maps.Size(20, 32) };
+            // Creates a new Google maps Marker object
+            result['marker'] = new google.maps.Marker({
+              position: { lat: result.location.lat, lng: result.location.lng },
+              map: this.map,
+              title: result.name,
+              id: result.id
+            });
+            /*result['infoWindow'] = new google.maps.InfoWindow({
             content: `<h3>${result.name}</h3>`
           });*/
 
-          result.marker.addListener('click', this.markerClick.bind(this, result.id), false);
-          //   // result.infoWindow.open(this.map, result.marker);
-          //   //this.update(result.id, result);
-          //   //window.location.href = `/details/${result.id}`;
-          // });
-        }
-        //Set the state for the results when data received
-        this.setState({
-          results
-        });
-      })
-      .catch(err => {this.setState({apiRequestFailed : true})}) // Resolve the reject from Foursquare API
+            result.marker.addListener('click', this.markerClick.bind(this, result.id, result), false);
+            //   // result.infoWindow.open(this.map, result.marker);
+            //   //this.update(result.id, result);
+            //   //window.location.href = `/details/${result.id}`;
+            // });
+          }
+          //Set the state for the results when data received
+          this.setState({
+            results
+          });
+        })
+        .catch(err => {
+          this.setState({ apiRequestFailed: true });
+        }); // Resolve the reject from Foursquare API
     }
   }
   // Redirect to Details page on a marker click and toggle the Details if the screen is small
-  markerClick(id) {
+  markerClick(id, cafe) {
     this.setState({ redirect: true, id: id });
     this.clickToggle();
+    // Set other markers to invisible
+    this.deleteMarkers(cafe)
   }
 
   // Get the results that match the user's search query
@@ -83,6 +88,15 @@ export default class MapContainer extends Component {
     } else {
       showingResults = this.state.results;
     }
+    // Set visibility for the markers in the matched results
+    for (let result of this.state.results) {
+      if (showingResults.includes(result)) {
+        result.marker.setVisible(true);
+      } else {
+        result.marker.setVisible(false);
+      }
+    }
+    console.log('hey')
     return showingResults;
   };
   updateQuery = event => {
@@ -97,23 +111,27 @@ export default class MapContainer extends Component {
   cafeLinkClick = (id, cafe) => {
     this.setState({ id });
     const google = this.props.google;
-    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+    // Set other markers to invisible
+    this.deleteMarkers(cafe)
+    cafe.marker.setAnimation(google.maps.Animation.null);
+    /*cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function() {
       cafe.marker.setAnimation(null);
-    }, 1500);
+    }, 1500);*/
   };
   //Get cafe's details if not already in this.state.cafeDetails
   updateCafesDetails = () => {
     if (!(this.state.id in this.state.cafesDetails)) {
-      getCafeDetails(this.state.id).then(results => {
-        const updatedDetails = Object.assign({}, this.state.cafesDetails);
-        updatedDetails[this.state.id] = results;
-        console.log(updatedDetails);
-        this.setState({ cafesDetails: updatedDetails });
-      })
-      .catch(err => {
-        this.setState({ detailsApiRequestFailed: true }) // Resolve the reject from Foursquare API
-      })
+      getCafeDetails(this.state.id)
+        .then(results => {
+          const updatedDetails = Object.assign({}, this.state.cafesDetails);
+          updatedDetails[this.state.id] = results;
+          console.log(updatedDetails);
+          this.setState({ cafesDetails: updatedDetails });
+        })
+        .catch(err => {
+          this.setState({ detailsApiRequestFailed: true }); // Resolve the reject from Foursquare API
+        });
     }
   };
   // Redirect to Details page
@@ -123,7 +141,14 @@ export default class MapContainer extends Component {
       // <Router path="/details" render={() => <Redirect push to={`/details/${this.state.id}`} />} />;
     }
   };
-
+  //Helper function used to ser other markers to invisible when Details page showed
+  deleteMarkers = cafe => {
+    this.state.results.map(result => {
+      if (result !== cafe) {
+        result.marker.setVisible(false);
+      }
+    });
+  };
   clickToggle = () => {
     const currentState = this.state.toggle;
     this.setState({ toggle: !currentState });
@@ -147,7 +172,7 @@ export default class MapContainer extends Component {
     };
     const { google } = this.props;
     const maps = google.maps;
-    const matchedResults = this.getMatchedResults();
+    //const matchedResults = this.getMatchedResults();
     return (
       // in our return function you must return a div with ref='map' and style.
       //Wrap the DOM in Router
@@ -159,7 +184,9 @@ export default class MapContainer extends Component {
             </button>
             <h1 className="title">Kbh Cafes</h1>
             {/*Handle a fail from Foursquare API*/}
-            {(this.state.apiRequestFailed) && <div>We are sorry. The API request to Foursquare has failed. Please try again later.</div>}
+            {this.state.apiRequestFailed && (
+              <div>We are sorry. The API request to Foursquare has failed. Please try again later.</div>
+            )}
           </div>
           <div className="main-container">
             <div className={this.state.toggle ? 'search-container toggle' : 'search-container'}>
@@ -173,7 +200,7 @@ export default class MapContainer extends Component {
                     google={this.props.google}
                     stopBounce={this.endBounce}
                     startBounce={this.startBounce}
-                    matchedResults={matchedResults}
+                    matchedResults={this.getMatchedResults}
                     updateQuery={this.updateQuery}
                   />
                 )}
@@ -188,7 +215,6 @@ export default class MapContainer extends Component {
                     idUrl={this.state.id}
                     redirect={this.state.redirect}
                     cafesDetails={this.state.cafesDetails}
-                    cafeLinkClick={this.cafeLinkClick}
                     updateCafesDetails={this.updateCafesDetails}
                     apiRequest={this.state.detailsApiRequestFailed}
                   />
@@ -196,13 +222,7 @@ export default class MapContainer extends Component {
               />
             </div>
             <div className="map-container">
-              <div>
-                {/* For each result, set it to visible if it's contained in the matchedResults*/}
-                {this.state.results.map(result => {
-                  matchedResults.includes(result) ? result.marker.setVisible(true) : result.marker.setVisible(false);
-                  console.log(result);
-                })}
-              </div>
+              <div>{/* For each result, check if it's in the matchedResults and set it to visible*/}</div>
               <div className="map" ref="map" style={style}>
                 loading map...
               </div>

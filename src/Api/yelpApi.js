@@ -5,8 +5,8 @@ import sortBy from 'sort-by';
 const lat = 55.6837;
 const lng = 12.5716;
 const category = '4bf58dd8d48988d16d941735';
-const clientID = 'TAMFSSUQNJSMYX5LVDQV0SNKJ0JRIFSY0ZTHM4O3EUMPRASY';
-const clientSecret = 'JF5QH00NJSD02POAPXJFNQLOEXHXQQQTHSASAAKELFENSVXE';
+const clientID = 'WU4PH3TLSPSHQZDLPCLN1UGEN4UUSY2PUS2DDJZBZR31YO0K';
+const clientSecret = 'UTEQBVWCX2CSJUJ4NEQFS13NEHKE5NHKNZ1K2Q50MWPOE5SH';
 const version = '20180518';
 const radius = '1000';
 const limit = '50';
@@ -28,13 +28,15 @@ export const getData = () => {
       ); //Get only data for these categories names (sometimes bakeries or restaurants are also included in the Cafe categoryID)
       onlyCafes.sort(sortBy('name'));
       return onlyCafes;
-    })
+    });
 };
 
 //Get details about each cafe
 export const getCafeDetails = id => {
   const ID = id;
-  return fetch(`https://api.foursquare.com/v2/venues/${ID}?client_id=${clientID}&client_secret=${clientSecret}&v=${version}`)
+  return fetch(
+    `https://api.foursquare.com/v2/venues/${ID}?client_id=${clientID}&client_secret=${clientSecret}&v=${version}`
+  )
     .then(response => {
       if (!response.ok) {
         throw response;
