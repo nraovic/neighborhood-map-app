@@ -168,7 +168,7 @@ export default class MapContainer extends Component {
 
     const style = {
       // MUST specify dimensions of the Google map
-      height: '100vh'
+      height: 'calc(100vh - 36px)',
     };
     const { google } = this.props;
     const maps = google.maps;

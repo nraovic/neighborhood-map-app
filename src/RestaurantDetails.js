@@ -40,6 +40,7 @@ export default class RestaurantDetails extends Component {
       rating = `${cafe.rating}/10`;
       websiteUrl = cafe.url;
       // Parse the url to get the part after the 'www' if it has it or after '/'
+      // TO DO: Do this with regex
       websiteUrl && (websiteUrl.includes('www') ? (websiteUrl = websiteUrl.substr(websiteUrl.indexOf('.') + 1)) : (websiteUrl = websiteUrl.substr(websiteUrl.lastIndexOf('/') + 1))); 
       if (cafe.popular && cafe.popular.timeframes) {
         timeFrames = cafe.popular.timeframes;

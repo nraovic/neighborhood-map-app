@@ -28,10 +28,18 @@
 }
 .search-container {
   width: 30%;
+      height: 100%;
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    background-color: white;
+    overflow-x: hidden;
 }
 
 .map-container {
   width: 70%;
+  position: fixed;
+  left: 30%
 }
 @keyframes App-logo-spin {
   from {

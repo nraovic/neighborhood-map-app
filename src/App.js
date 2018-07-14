@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     const title = "Valby Cafe's";
     return (
-      <div>
+      <div >
 
         <MapContainer google={this.props.google} />
       </div>
