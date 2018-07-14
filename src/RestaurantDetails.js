@@ -32,15 +32,18 @@ export default class RestaurantDetails extends Component {
       description = cafe.description;
       address = cafe.location.address;
       phone = cafe.contact.formattedPhone;
-      if (cafe.popular.isOpen) {
+      if (cafe.popular && cafe.popular.isOpen) {
         currentlyOpen = 'Open';
       } else {
         currentlyOpen = 'Closed';
       }
       rating = `${cafe.rating}/10`;
-      likes = cafe.likes.count;
       websiteUrl = cafe.url;
-      timeFrames = cafe.popular.timeframes;
+      // Parse the url to get the part after the 'www' if it has it or after '/'
+      websiteUrl && (websiteUrl.includes('www') ? (websiteUrl = websiteUrl.substr(websiteUrl.indexOf('.') + 1)) : (websiteUrl = websiteUrl.substr(websiteUrl.lastIndexOf('/') + 1))); 
+      if (cafe.popular && cafe.popular.timeframes) {
+        timeFrames = cafe.popular.timeframes;
+      }
     }
     return (
       <div>
@@ -54,23 +57,29 @@ export default class RestaurantDetails extends Component {
           <div>
             <h2>{name}</h2>
             <p>{description}</p>
-            <a href={websiteUrl} target="_blank">
-              <FontAwesomeIcon icon={faGlobe} />
-              {websiteUrl}
-            </a>
-            <p>
-              <FontAwesomeIcon icon={faPhone} />
-              {phone}
-            </p>
-            <p>
-              <FontAwesomeIcon icon={faMapMarkerAlt} />
-              {address}
-            </p>
+            {websiteUrl && (
+              <a href={websiteUrl} target="_blank">
+                <FontAwesomeIcon icon={faGlobe} />
+                {websiteUrl}
+              </a>
+            )}
+            {phone && (
+              <p>
+                <FontAwesomeIcon icon={faPhone} />
+                {phone}
+              </p>
+            )}
+            {address && (
+              <p>
+                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                {address}
+              </p>
+            )}
             <p>Rating: {rating}</p>
             <p>Hours: {currentlyOpen}</p>
             {/*Extract the opening hours by days*/}
             <div>
-              {timeFrames.map(frame => (
+              {timeFrames && timeFrames.map(frame => (
                 <div>
                   <span>{frame.days}</span>
                   {frame.open.map(time => <span>{time.renderedTime}</span>)}
