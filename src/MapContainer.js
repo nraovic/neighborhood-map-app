@@ -113,11 +113,10 @@ export default class MapContainer extends Component {
     const google = this.props.google;
     // Set other markers to invisible
     this.deleteMarkers(cafe)
-    cafe.marker.setAnimation(google.maps.Animation.null);
-    /*cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function() {
       cafe.marker.setAnimation(null);
-    }, 1500);*/
+    }, 1500);
   };
   //Get cafe's details if not already in this.state.cafeDetails
   updateCafesDetails = () => {
@@ -168,7 +167,7 @@ export default class MapContainer extends Component {
 
     const style = {
       // MUST specify dimensions of the Google map
-      height: 'calc(100vh - 36px)',
+      height: 'calc(100vh - 66px)',
     };
     const { google } = this.props;
     const maps = google.maps;

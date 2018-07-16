@@ -11,13 +11,13 @@ export default class SearchBar extends Component {
     console.log(matched)
     return (
       <div>
-        <form onSubmit={updateQuery}>
+        <form className="seach-form" onSubmit={updateQuery}>
           <input className="search-input" type="text" placeholder="Seach for a cafe" />
-          <button type="submit">Filter</button>
+          <button className="filter-btn" type="submit">Filter</button>
         </form>
         <ul className="search-results">
           {matched.map(result => (
-            <li>
+            <li className="cafe-link">
               {/*We need to bind this in order to refer to the scope of MapContainer*/}
               <Link
                 to={`details/${result.id}`}

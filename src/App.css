@@ -1,53 +1,86 @@
-.App {
-  text-align: center;
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+* {
+  box-sizing: border-box !important;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+a,
+a:hover,
+a:visited,
+a:active {
+  text-decoration: none;
+  color: black;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
+.title {
+  position: relative;
 }
 
 .main-container {
   display: flex;
   flex-wrap: wrap;
 }
+.title-container {
+  background-color: #696969;
+  padding: 15px 0;
+  text-align: center;
+}
 .search-container {
   width: 30%;
-      height: 100%;
-    position: fixed;
-    left: 0;
-    z-index: 1;
-    background-color: white;
-    overflow-x: hidden;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  z-index: 1;
+  background-color: #eee;
+  overflow-x: hidden;
+  padding: 10px;
 }
-
+.search-input {
+  height: 25px;
+  width: 200px;
+  margin-right: 5px;
+  border-radius: 2px;
+  border: 0;
+}
+.filter-btn {
+  height: 25px;
+  width: 60px;
+  background-color: #696969;
+  border: 0;
+  border-radius: 2px;
+}
+.cafe-link {
+  padding-bottom: 8px;
+}
+.cafe-link a:hover {
+ font-weight: 600;
+}
+/*Details*/
+.back-link {
+  color: #8ac6ef !important;
+}
+.font-awesome {
+  margin-right: 5px;
+}
+.cafe-times {
+  margin-left: 5px;
+  font-size: 0.8em;
+}
+.cafe-description {
+  font-style: italic;
+}
+.map-container, .search-container {
+  height: calc(100vh - 66px);
+}
 .map-container {
   width: 70%;
   position: fixed;
-  left: 30%
-}
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  left: 30%;
 }
 
 #map {
@@ -64,11 +97,28 @@
 }
 
 @media (max-width: 768px) {
+  .title-container {
+    text-align: left;
+    padding: 10px;
+  }
   .hamburger-btn {
     display: inline;
+    margin-right: 30px;
+    vertical-align: top;
+    font-size: 30px;
+    background: none;
+    color: #ff9900;
+    border: 0;
+    border-radius: 2px;
   }
   .map-container {
     width: 100%;
+    height: 100%;
+    position: relative;
+    left: 0;
+  }
+  #map {
+    zoom: 0.5;
   }
   .search-container {
     height: 100%;
@@ -76,10 +126,8 @@
     position: fixed;
     left: -400px;
     z-index: 1;
-    background-color: white;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
   }
   .toggle {
     left: 0;

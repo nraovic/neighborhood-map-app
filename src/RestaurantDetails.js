@@ -15,7 +15,6 @@ export default class RestaurantDetails extends Component {
   }
   render() {
     const { idUrl, cafesDetails, apiRequest } = this.props;
-    const photoStyle = { maxWidth: '400px', maxHeight: '400px' };
     // Get url for the cafe's photo
     const photoUrl = url => {
       const photoUrl = `${cafesDetails[url].venue.bestPhoto.prefix}${cafesDetails[url].venue.bestPhoto.height}x${
@@ -41,14 +40,19 @@ export default class RestaurantDetails extends Component {
       websiteUrl = cafe.url;
       // Parse the url to get the part after the 'www' if it has it or after '/'
       // TO DO: Do this with regex
-      websiteUrl && (websiteUrl.includes('www') ? (websiteUrl = websiteUrl.substr(websiteUrl.indexOf('.') + 1)) : (websiteUrl = websiteUrl.substr(websiteUrl.lastIndexOf('/') + 1))); 
+      websiteUrl &&
+        (websiteUrl.includes('www')
+          ? (websiteUrl = websiteUrl.substr(websiteUrl.indexOf('.') + 1))
+          : (websiteUrl = websiteUrl.substr(websiteUrl.lastIndexOf('/') + 1)));
       if (cafe.popular && cafe.popular.timeframes) {
         timeFrames = cafe.popular.timeframes;
       }
     }
     return (
       <div>
-        <Link to="/">Go to results</Link>
+        <Link className="back-link" to="/">
+          Go back to results
+        </Link>
         {/*Handle a fail from Foursquare API*/}
         {apiRequest && (
           <div>We are sorry. We could not get the data about the Cafe from Foursquare. Please try again later.</div>
@@ -56,38 +60,44 @@ export default class RestaurantDetails extends Component {
         {/*Check first if the data has been updated in Cafe Details*/}
         {idUrl in cafesDetails && (
           <div>
-            <h2>{name}</h2>
-            <p>{description}</p>
+            <h2 className="cafe-name">{name}</h2>
+            <p className="cafe-description">{description}</p>
             {websiteUrl && (
-              <a href={websiteUrl} target="_blank">
-                <FontAwesomeIcon icon={faGlobe} />
-                {websiteUrl}
+              <a href={websiteUrl} target="_blank" className="cafe-url">
+                <FontAwesomeIcon icon={faGlobe} className="font-awesome" />
+                <span>{websiteUrl}</span>
               </a>
             )}
             {phone && (
-              <p>
-                <FontAwesomeIcon icon={faPhone} />
-                {phone}
+              <p className="cafe-phone">
+                <FontAwesomeIcon icon={faPhone} className="font-awesome" />
+                <span>{phone}</span>
               </p>
             )}
             {address && (
-              <p>
-                <FontAwesomeIcon icon={faMapMarkerAlt} />
-                {address}
+              <p className="cafe-address">
+                <FontAwesomeIcon icon={faMapMarkerAlt} className="font-awesome" />
+                <span>{address}</span>
               </p>
             )}
-            <p>Rating: {rating}</p>
-            <p>Hours: {currentlyOpen}</p>
+            <p className="cafe-rating">
+              Rating: <span>{rating}</span>
+            </p>
+            <img src={photoUrl(idUrl)} style={{ width: '100%' }} className="cafe-img" />
+
+            <p className="cafe-open">
+              Hours: <span>{currentlyOpen}</span>
+            </p>
             {/*Extract the opening hours by days*/}
-            <div>
-              {timeFrames && timeFrames.map(frame => (
-                <div>
-                  <span>{frame.days}</span>
-                  {frame.open.map(time => <span>{time.renderedTime}</span>)}
-                </div>
-              ))}
+            <div className="cafe-hours">
+              {timeFrames &&
+                timeFrames.map(frame => (
+                  <div>
+                    <span className="cafe-days">{frame.days}:</span>
+                    {frame.open.map(time => <span className="cafe-times">{time.renderedTime}</span>)}
+                  </div>
+                ))}
             </div>
-            <img src={photoUrl(idUrl)} style={photoStyle} />
           </div>
         )}
       </div>
