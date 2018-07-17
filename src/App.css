@@ -32,7 +32,6 @@ a:active {
 }
 .search-container {
   width: 30%;
-  height: 100%;
   position: fixed;
   left: 0;
   z-index: 1;
@@ -58,7 +57,7 @@ a:active {
   padding-bottom: 8px;
 }
 .cafe-link a:hover {
- font-weight: 600;
+  font-weight: 600;
 }
 /*Details*/
 .back-link {
@@ -74,8 +73,9 @@ a:active {
 .cafe-description {
   font-style: italic;
 }
-.map-container, .search-container {
-  height: calc(100vh - 66px);
+.map-container,
+.search-container {
+  height: calc(100vh - 68px); /*minus the height of title container*/
 }
 .map-container {
   width: 70%;
@@ -121,15 +121,21 @@ a:active {
     zoom: 0.5;
   }
   .search-container {
-    height: 100%;
     width: 300px;
     position: fixed;
     left: -400px;
     z-index: 1;
     overflow-x: hidden;
     transition: 0.5s;
+    visibility: hidden;
+  }
+  .search-container,
+  .map-container,
+  #map {
+    height: calc(100vh - 58px);
   }
   .toggle {
     left: 0;
+    visibility: visible;
   }
 }

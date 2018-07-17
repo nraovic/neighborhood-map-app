@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
-import { getCafeDetails } from './Api/yelpApi.js';
-import update from 'immutability-helper';
-import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faGlobe, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
+import './App.css';
 
 export default class RestaurantDetails extends Component {
   state = {};
@@ -23,10 +20,9 @@ export default class RestaurantDetails extends Component {
       return photoUrl;
     };
     // Define all data to be listed in the Details section.
-    let cafe, name, description, address, phone, currentlyOpen, timeFrames, rating, likes, websiteUrl;
+    let cafe, name, description, address, phone, currentlyOpen, timeFrames, rating, websiteUrl;
     if (idUrl in cafesDetails) {
       cafe = cafesDetails[idUrl].venue;
-      console.log(cafe);
       name = cafe.name;
       description = cafe.description;
       address = cafe.location.address;
@@ -49,7 +45,7 @@ export default class RestaurantDetails extends Component {
       }
     }
     return (
-      <div>
+      <div className="details">
         <Link className="back-link" to="/">
           Go back to results
         </Link>
@@ -59,7 +55,7 @@ export default class RestaurantDetails extends Component {
         )}
         {/*Check first if the data has been updated in Cafe Details*/}
         {idUrl in cafesDetails && (
-          <div>
+          <div className="details">
             <h2 className="cafe-name">{name}</h2>
             <p className="cafe-description">{description}</p>
             {websiteUrl && (
@@ -80,21 +76,25 @@ export default class RestaurantDetails extends Component {
                 <span>{address}</span>
               </p>
             )}
-            <p className="cafe-rating">
-              Rating: <span>{rating}</span>
-            </p>
-            <img src={photoUrl(idUrl)} style={{ width: '100%' }} className="cafe-img" />
+            {rating && (
+              <p className="cafe-rating">
+                Rating: <span>{rating}</span>
+              </p>
+            )}
+            <img alt={`Café ${name}`} src={photoUrl(idUrl)} style={{ width: '100%' }} className="cafe-img" />
 
-            <p className="cafe-open">
-              Hours: <span>{currentlyOpen}</span>
-            </p>
-            {/*Extract the opening hours by days*/}
+            {currentlyOpen && (
+              <p className="cafe-open">
+                Hours: <span>{currentlyOpen}</span>
+              </p>
+            )}
+            {/*Get the opening hours by days*/}
             <div className="cafe-hours">
               {timeFrames &&
-                timeFrames.map(frame => (
-                  <div>
+                timeFrames.map((frame, index) => (
+                  <div key={index}>
                     <span className="cafe-days">{frame.days}:</span>
-                    {frame.open.map(time => <span className="cafe-times">{time.renderedTime}</span>)}
+                    {frame.open.map((time, index) => <span key={index} className="cafe-times">{time.renderedTime}</span>)}
                   </div>
                 ))}
             </div>
