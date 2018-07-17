@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faGlobe, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 
-export default class RestaurantDetails extends Component {
+export default class CafeDetails extends Component {
   state = {};
   componentWillMount() {
     const { idUrl, updateCafesDetails } = this.props;

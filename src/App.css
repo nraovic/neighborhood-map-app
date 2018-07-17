@@ -30,6 +30,7 @@ a:active {
   padding: 15px 0;
   text-align: center;
 }
+/* Search Component */
 .search-container {
   width: 30%;
   position: fixed;
@@ -59,7 +60,7 @@ a:active {
 .cafe-link a:hover {
   font-weight: 600;
 }
-/*Details*/
+/* Details Component*/
 .back-link {
   color: #8ac6ef !important;
 }
@@ -97,6 +98,9 @@ a:active {
 }
 
 @media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
   .title-container {
     text-align: left;
     padding: 10px;
@@ -130,9 +134,8 @@ a:active {
     visibility: hidden;
   }
   .search-container,
-  .map-container,
-  #map {
-    height: calc(100vh - 58px);
+  .map-container {
+    height: calc(100vh - 56px);
   }
   .toggle {
     left: 0;

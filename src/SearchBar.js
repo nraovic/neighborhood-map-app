@@ -4,7 +4,7 @@ import './App.css';
 
 export default class SearchBar extends Component {
   render() {
-    const { updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
+    const { google, updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
     const matched = matchedResults();
     return (
       <div className="search">
@@ -17,7 +17,7 @@ export default class SearchBar extends Component {
         <ul className="search-results">
           {matched.map(result => (
             <li key={result.id} className="cafe-link">
-              {/*We need to bind this in order to refer to the scope of MapContainer*/}
+              {/*We need to bind this in order to refer to the scope of MainPage*/}
               <Link
                 to={`details/${result.id}`}
                 onClick={cafeLinkClick.bind(this, result.id, result)}

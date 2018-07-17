@@ -6,11 +6,11 @@ import { Redirect } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import SearchBar from './SearchBar.js';
-import RestaurantDetails from './RestaurantDetails.js';
+import CafeDetails from './CafeDetails.js';
 import { getData, getCafeDetails } from './Api/yelpApi.js';
 import './App.css';
 
-export default class MapContainer extends Component {
+export default class MainPage extends Component {
   state = {
     results: [], // List of cafes' objects
     query: '', // User's input from the Filter field
@@ -159,7 +159,7 @@ export default class MapContainer extends Component {
             <button type="button" className="hamburger-btn" onClick={this.clickToggle}>
               <FontAwesomeIcon icon={faBars} />
             </button>
-            <h1 className="title">Kbh Cafes</h1>
+            <h1 className="title">Copenhagen Cafes</h1>
             {/*Handle a fail from Foursquare API*/}
             {this.state.apiRequestFailed && (
               <div>We are sorry. The API request to Foursquare has failed. Please try again later.</div>
@@ -188,7 +188,7 @@ export default class MapContainer extends Component {
               <Route
                 path={`/details/${this.state.id}`}
                 render={() => (
-                  <RestaurantDetails
+                  <CafeDetails
                     idUrl={this.state.id}
                     redirect={this.state.redirect}
                     cafesDetails={this.state.cafesDetails}
