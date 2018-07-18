@@ -4,7 +4,7 @@ import './App.css';
 
 export default class SearchBar extends Component {
   render() {
-    const { google, updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
+    const { updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
     const matched = matchedResults();
     return (
       <div className="search">
