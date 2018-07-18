@@ -9,6 +9,7 @@ import SearchBar from './SearchBar.js';
 import CafeDetails from './CafeDetails.js';
 import { getData, getCafeDetails } from './Api/FoursquareApi.js';
 import './App.css';
+import foursquare from './logos/foursquare.png';
 
 export default class MainPage extends Component {
   state = {
@@ -164,6 +165,8 @@ export default class MainPage extends Component {
             {this.state.apiRequestFailed && (
               <div>We are sorry. The API request to Foursquare has failed. Please try again later.</div>
             )}
+            {/*Add Foursquare logo*/} 
+            <img src={foursquare} alt="Foursquare logo" style={{height:"20px", width:"15px"}}/>
           </header>
           <main className="main-content">
             <section className={this.state.toggle ? 'search-container toggle' : 'search-container'}>

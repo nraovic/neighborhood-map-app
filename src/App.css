@@ -19,6 +19,7 @@ a:active {
 
 .title {
   position: relative;
+  margin-right: 10px;
 }
 
 .main-container {
@@ -109,7 +110,7 @@ a:active {
     display: inline;
     margin-right: 30px;
     vertical-align: top;
-    font-size: 30px;
+    font-size: 28px;
     background: none;
     color: #ff9900;
     border: 0;
@@ -140,5 +141,13 @@ a:active {
   .toggle {
     left: 0;
     visibility: visible;
+  }
+}
+@media (max-width: 424px) {
+  .title, .hamburger-btn {
+    font-size: 24px;
+  }
+  .hamburger-btn {
+    margin-right: 10px;
   }
 }
