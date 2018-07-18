@@ -1,6 +1,6 @@
 ## Project Description
 Single page application that provides a list of all Cafes in central Copenhagen. The listing and details about each cafe is obtained from Foursquare API and its displayed on the map by the Google Maps API. 
-The app is build with the React Framework using the React Create App.
+The app is build with the React Framework using the React-Create-App starter.
 
 ## How to Use the App
 
