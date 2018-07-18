@@ -11,7 +11,7 @@ You can run the app in the Development or Production mode. The Service Worker wi
 
 ### Development Mode
 
-1. To run the project you need [Node.js] (https://nodejs.org/en/) installed. 
+1. To run the project you need [Node.js](https://nodejs.org/en/) installed. 
 2. Once node installed, clone this repo by running git clone https://github.com/nraovic/neighborhood-map-app
 3. Now run ```npm install``` to install all dependances
 3. Launch the app by running ```npm start```
