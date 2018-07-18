@@ -1,10 +1,10 @@
 ## Project Description
-Single page application that provides a list of all Cafes in central Copenhagen. The listing and details about each cafe is obtained from Foursquare API and its displayed on the map by the Google Maps API. 
+A single page application that list cafes in central Copenhagen. The listing and details about each cafe are obtained from Foursquare API and are displayed on the map by the Google Maps API. 
 The app is build with the React Framework using the React-Create-App starter.
 
 ## How to Use the App
 
-The main page shows a listing and a map of the cafes in the central area of Copenhagen. It is possible to search for and filter specific cafes. By clicking on either the cafe's link or its marker, details about the cafe will be displayed in the sidebar.
+The main page shows a listing and a map of the cafes in the central area of Copenhagen. It is possible to search for and filter specific cafes. By clicking on either a cafe's link or its marker, details about the cafe will be displayed in the sidebar.
 
 ## How to Run the App 
 You can run the app in the Development or Production mode. The Service Worker will work only in the Production Mode.
