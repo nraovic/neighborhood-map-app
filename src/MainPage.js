@@ -163,7 +163,7 @@ export default class MainPage extends Component {
             <h1 className="title">Copenhagen Cafes</h1>
             {/*Handle a fail from Foursquare API*/}
             {this.state.apiRequestFailed && (
-              <div>We are sorry. The API request to Foursquare has failed. Please try again later.</div>
+              <div className="request-fail">We are sorry. The API request to Foursquare has failed. Please try again later.</div>
             )}
             {/*Add Foursquare logo*/} 
             <img src={foursquare} alt="Foursquare logo" style={{height:"20px", width:"15px"}}/>

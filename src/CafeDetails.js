@@ -51,7 +51,9 @@ export default class CafeDetails extends Component {
         </Link>
         {/*Handle a fail from Foursquare API*/}
         {apiRequest && (
-          <div>We are sorry. We could not get the data about the Cafe from Foursquare. Please try again later.</div>
+          <div className="request-fail">
+            We are sorry. We could not get the data about the Cafe from Foursquare. Please try again later.
+          </div>
         )}
         {/*Check first if the data has been updated in Cafe Details*/}
         {idUrl in cafesDetails && (
@@ -94,7 +96,11 @@ export default class CafeDetails extends Component {
                 timeFrames.map((frame, index) => (
                   <div key={index}>
                     <span className="cafe-days">{frame.days}:</span>
-                    {frame.open.map((time, index) => <span key={index} className="cafe-times">{time.renderedTime}</span>)}
+                    {frame.open.map((time, index) => (
+                      <span key={index} className="cafe-times">
+                        {time.renderedTime}
+                      </span>
+                    ))}
                   </div>
                 ))}
             </div>
