@@ -129,11 +129,11 @@ export default class MainPage extends Component {
   };
   //Helper function used to ser other markers to invisible when Details page showed
   deleteMarkers = cafe => {
-    this.state.results.map(result => {
+    for (let result of this.state.results) {
       if (result !== cafe) {
         result.marker.setVisible(false);
       }
-    });
+    };
   };
   clickToggle = () => {
     const currentState = this.state.toggle;
