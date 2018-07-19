@@ -20,48 +20,61 @@ export default class MainPage extends Component {
     redirect: false, // Redirect to the Deails page?
     toggle: false, // Toggle the search results?
     apiRequestFailed: false,
-    detailsApiRequestFailed: false
+    detailsApiRequestFailed: false,
+    mapError: false
   };
   componentDidMount() {
-    this.loadMap(); // call loadMap function to load the google map
-  }
-
-  loadMap() {
-    if (this.props && this.props.google) {
-      // checks to make sure that props have been passed
-      const { google } = this.props;
-      const maps = google.maps;
-      const mapRef = this.refs.map; // Looks for HTML div ref 'map'. Returned in render below.
-      const node = ReactDOM.findDOMNode(mapRef); // Finds the 'map' div in the React DOM, names it node
-      const lat = 55.6837; // Latitude of Copenhagen Center
-      const lng = 12.5716; // Longitude of Copenhagen Center
-      const mapConfig = Object.assign({}, { center: { lat: lat, lng: lng }, zoom: 13, mapTypeId: 'roadmap' }); // sets center of google map to Copenhagen Center.
-
-      this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
-
-      // Get the cafes data and add markers to the map for each cafe
-      getData()
-        .then(results => {
-          for (let result of results) {
-            // Creates a new Google maps Marker object
-            result['marker'] = new google.maps.Marker({
-              position: { lat: result.location.lat, lng: result.location.lng },
-              map: this.map,
-              title: result.name,
-              id: result.id
-            });
-            result.marker.addListener('click', this.markerClick.bind(this, result.id, result), false);
-          }
-          //Set the state for the results when data received
-          this.setState({
-            results
+    // Load the Google map
+    this.loadMap(); 
+    // Get the cafes data and add markers to the map for each cafe
+    getData()
+      .then(results => {
+        for (let result of results) {
+          // Creates a new Google maps Marker object
+          result['marker'] = new window.google.maps.Marker({
+            position: { lat: result.location.lat, lng: result.location.lng },
+            map: this.map,
+            title: result.name,
+            id: result.id
           });
-        })
-        .catch(err => {
-          this.setState({ apiRequestFailed: true });
-        }); // Resolve the reject from Foursquare API
-    }
+          result.marker.addListener('click', this.markerClick.bind(this, result.id, result), false);
+        }
+        //Set the state for the results when data received
+        this.setState({
+          results
+        });
+      })
+      .catch(err => {
+        this.setState({ apiRequestFailed: true });
+      }); // Resolve the reject from Foursquare API
+    //}
   }
+
+  loadMap = () => {
+    var ref = window.document.getElementsByTagName('script')[0];
+    var script = window.document.createElement('script');
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAEs1oz4Tk4loTRw9JQRvTF1ufAQ7Z2Jmk&callback=initMap';
+    script.async = true;
+    //Set state for the error message if Map doesn't load
+    script.onerror = function() {
+      this.setState({ mapError: true });
+    }.bind(this);
+    ref.parentNode.insertBefore(script, ref);
+    window.initMap = this.initMap;
+  };
+  //Initialize map
+  initMap = () => {
+    const mapRef = this.refs.map; // Looks for HTML div ref 'map'. Returned in render below.
+    const node = ReactDOM.findDOMNode(mapRef); // Finds the 'map' div in the React DOM, names it node
+    const lat = 55.6837; // Latitude of Copenhagen Center
+    const lng = 12.5716; // Longitude of Copenhagen Center
+    const mapConfig = Object.assign({}, { center: { lat: lat, lng: lng }, zoom: 13, mapTypeId: 'roadmap' }); // sets center of google map to Copenhagen Center.
+
+    this.map = new window.google.maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
+    if (this.map) {
+      this.setState({ mapLoaded: false });
+    }
+  };
   // Redirect to Details page on a marker click and toggle the Details if the screen is small
   markerClick(id, cafe) {
     this.setState({ redirect: true, id: id });
@@ -100,10 +113,9 @@ export default class MainPage extends Component {
   // Update id and add bounce on link click for 1500ms(2 bounces)
   cafeLinkClick = (id, cafe) => {
     this.setState({ id });
-    const google = this.props.google;
     // Set other markers to invisible
     this.deleteMarkers(cafe);
-    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+    cafe.marker.setAnimation(window.google.maps.Animation.BOUNCE);
     setTimeout(function() {
       cafe.marker.setAnimation(null);
     }, 1500);
@@ -134,15 +146,14 @@ export default class MainPage extends Component {
       if (result !== cafe) {
         result.marker.setVisible(false);
       }
-    };
+    }
   };
   clickToggle = () => {
     const currentState = this.state.toggle;
     this.setState({ toggle: !currentState });
   };
   startBounce = cafe => {
-    const google = this.props.google;
-    cafe.marker.setAnimation(google.maps.Animation.BOUNCE);
+    cafe.marker.setAnimation(window.google.maps.Animation.BOUNCE);
   };
   endBounce = cafe => {
     cafe.marker.setAnimation(null);
@@ -163,10 +174,12 @@ export default class MainPage extends Component {
             <h1 className="title">Copenhagen Cafes</h1>
             {/*Handle a fail from Foursquare API*/}
             {this.state.apiRequestFailed && (
-              <div className="request-fail">We are sorry. The API request to Foursquare has failed. Please try again later.</div>
+              <div className="request-fail">
+                We are sorry. The API request to Foursquare has failed. Please try again later.
+              </div>
             )}
-            {/*Add Foursquare logo*/} 
-            <img src={foursquare} alt="Foursquare logo" style={{height:"20px", width:"15px"}}/>
+            {/*Add Foursquare logo*/}
+            <img src={foursquare} alt="Foursquare logo" style={{ height: '20px', width: '15px' }} />
           </header>
           <main className="main-content">
             <section className={this.state.toggle ? 'search-container toggle' : 'search-container'}>
@@ -177,7 +190,6 @@ export default class MainPage extends Component {
                 render={() => (
                   <SearchBar
                     cafeLinkClick={this.cafeLinkClick}
-                    google={this.props.google}
                     stopBounce={this.endBounce}
                     startBounce={this.startBounce}
                     matchedResults={this.getMatchedResults}
@@ -203,9 +215,13 @@ export default class MainPage extends Component {
             </section>
             <section className="map-container">
               {/* Return a div with ref='map' and style.*/}
-              <div className="map" ref="map" role="application" style={style}>
-                loading map...
-              </div>
+              {this.state.mapError ? (
+                <div role="alert">Google Map could not load. Plese try again later.</div>
+              ) : (
+                <div className="map" ref="map" role="application" style={style}>
+                  loading map...
+                </div>
+              )}
             </section>
           </main>
         </div>
