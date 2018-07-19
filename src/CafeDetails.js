@@ -20,7 +20,7 @@ export default class CafeDetails extends Component {
       return photoUrl;
     };
     // Define all data to be listed in the Details section.
-    let cafe, name, description, address, phone, currentlyOpen, timeFrames, rating, websiteUrl;
+    let cafe, name, description, address, phone, currentlyOpen, timeFrames, rating, websiteUrl, foursquareUrl;
     if (idUrl in cafesDetails) {
       cafe = cafesDetails[idUrl].venue;
       name = cafe.name;
@@ -34,6 +34,7 @@ export default class CafeDetails extends Component {
       }
       rating = `${cafe.rating}/10`;
       websiteUrl = cafe.url;
+      foursquareUrl = cafe.canonicalUrl;
       // Parse the url to get the part after the 'www' if it has it or after '/'
       // TO DO: Do this with regex
       websiteUrl &&
@@ -104,6 +105,12 @@ export default class CafeDetails extends Component {
                   </div>
                 ))}
             </div>
+            <p className="foursquare-link">
+              For more information about the Cafe please visit its{' '}
+              <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef'}}>
+                Foursquare Page
+              </a>
+            </p>
           </div>
         )}
       </div>
