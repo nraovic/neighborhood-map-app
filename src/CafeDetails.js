@@ -106,9 +106,9 @@ export default class CafeDetails extends Component {
                 ))}
             </div>
             <p className="foursquare-link">
-              For more information about the Cafe please visit its{' '}
+              The info aboout the cafe has been obtained from Foursquare. For more details please visit
               <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef'}}>
-                Foursquare Page
+                the Foursquare Page
               </a>
             </p>
           </div>
