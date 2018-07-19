@@ -7,7 +7,7 @@ export default class SearchBar extends Component {
     const { updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
     const matched = matchedResults();
     return (
-      <div className="search">
+      <div className="search" role="complementary">
         <form className="search-form" onSubmit={updateQuery}>
           <input className="search-input" type="text" placeholder="Seach for a cafe" />
           <button className="filter-btn" type="submit">

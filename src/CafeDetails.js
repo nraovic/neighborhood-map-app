@@ -45,13 +45,13 @@ export default class CafeDetails extends Component {
       }
     }
     return (
-      <div className="details">
+      <div className="details" role="complementary">
         <Link className="back-link" to="/">
           Go back to results
         </Link>
         {/*Handle a fail from Foursquare API*/}
         {apiRequest && (
-          <div className="request-fail">
+          <div className="request-fail" role="alert">
             We are sorry. We could not get the data about the Cafe from Foursquare. Please try again later.
           </div>
         )}

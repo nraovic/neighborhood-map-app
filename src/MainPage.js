@@ -47,7 +47,6 @@ export default class MainPage extends Component {
       .catch(err => {
         this.setState({ apiRequestFailed: true });
       }); // Resolve the reject from Foursquare API
-    //}
   }
 
   loadMap = () => {
@@ -166,7 +165,7 @@ export default class MainPage extends Component {
     return (
       // Wrap the DOM in Router
       <Router>
-        <div className="container">
+        <div className="container" role="main">
           <header className="title-container">
             <button type="button" className="hamburger-btn" onClick={this.clickToggle}>
               <FontAwesomeIcon icon={faBars} />
@@ -174,7 +173,7 @@ export default class MainPage extends Component {
             <h1 className="title">Copenhagen Cafes</h1>
             {/*Handle a fail from Foursquare API*/}
             {this.state.apiRequestFailed && (
-              <div className="request-fail">
+              <div className="request-fail" role="alert">
                 We are sorry. The API request to Foursquare has failed. Please try again later.
               </div>
             )}
@@ -216,7 +215,7 @@ export default class MainPage extends Component {
             <section className="map-container">
               {/* Return a div with ref='map' and style.*/}
               {this.state.mapError ? (
-                <div role="alert">Google Map could not load. Plese try again later.</div>
+                <div className="error" role="alert">Google Map could not load. Plese try again later.</div>
               ) : (
                 <div className="map" ref="map" role="application" style={style}>
                   loading map...
