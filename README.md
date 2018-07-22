@@ -7,7 +7,7 @@ The app is build with the React Framework using the React-Create-App starter.
 The main page shows a listing and a map of the cafes in the central area of Copenhagen. It is possible to search for and filter specific cafes. By clicking on either a cafe's link or its marker, details about the cafe will be displayed in the sidebar.
 
 ## How to Run the App 
-You can run the app in the Development or Production mode. The Service Worker will work only in the Production Mode.
+You can run the app in the Development or Production mode. Note that the Service Worker will work only in the Production Mode.
 
 ### Development Mode
 
