@@ -1,6 +1,8 @@
 ## Project Description
+
 A single page application that list cafes in central Copenhagen. The listing and details about each cafe are obtained from Foursquare API and are displayed on the map by the Google Maps API. 
 The app is build with the React Framework using the React-Create-App starter.
+A hosted version of the app https://nraovic.github.io/neighborhood-map-app/
 
 ## How to Use the App
 
@@ -21,6 +23,6 @@ Your browser should automatically run the app, otherwise navigate to http://loca
 ### Production Mode
 
 1. To run the app in the production mode, first run ```npm run build```
-2. When the application is ready to be deployed, run ```serve -s build```
+2. When the application is ready to be deployed at the gh page, run ```npm run deploy```
 
-The page will be hosted at http://localhost:5000/
+You can see the demo at https://nraovic.github.io/neighborhood-map-app/
