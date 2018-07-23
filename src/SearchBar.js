@@ -6,7 +6,6 @@ export default class SearchBar extends Component {
   render() {
     const { updateQuery, matchedResults, cafeLinkClick, startBounce, stopBounce } = this.props;
     const matched = matchedResults();
-    const path = process.env.PUBLIC_URL + `/details/${this.state.id}`;
     return (
       <div className="search" role="complementary">
         <form className="search-form" onSubmit={updateQuery}>
@@ -20,7 +19,7 @@ export default class SearchBar extends Component {
             <li key={result.id} className="cafe-link">
               {/*We need to bind this in order to refer to the scope of MainPage*/}
               <Link
-                to={path}
+                to={`details/${result.id}`}
                 onClick={cafeLinkClick.bind(this, result.id, result)}
                 onMouseEnter={startBounce.bind(this, result)}
                 onMouseLeave={stopBounce.bind(this, result)}
