@@ -25,7 +25,7 @@ export default class MainPage extends Component {
   };
   componentDidMount() {
     // Load the Google map
-    this.loadMap(); 
+    this.loadMap();
     // Get the cafes data and add markers to the map for each cafe
     getData()
       .then(results => {
@@ -136,7 +136,13 @@ export default class MainPage extends Component {
   // Redirect to Details page
   renderRedirect = () => {
     if (this.state.redirect) {
-      return <Redirect from={`/`} push to={`/details/${this.state.id}`} />;
+      return (
+        <Redirect
+          from={process.env.PUBLIC_URL + '/'}
+          push
+          to={process.env.PUBLIC_URL + `/details/${this.state.id}`}
+        />
+      );
     }
   };
   //Helper function used to ser other markers to invisible when Details page showed
@@ -185,7 +191,7 @@ export default class MainPage extends Component {
               {/* Add Route to the Search Bar with the same path as the main page */}
               <Route
                 exact
-                path="/"
+                path={process.env.PUBLIC_URL + '/'}
                 render={() => (
                   <SearchBar
                     cafeLinkClick={this.cafeLinkClick}
@@ -200,7 +206,7 @@ export default class MainPage extends Component {
               {this.renderRedirect()}
               {/* Add Route to the Details Bar with the details path */}
               <Route
-                path={`/details/${this.state.id}`}
+                path={process.env.PUBLIC_URL + `/details/${this.state.id}`}
                 render={() => (
                   <CafeDetails
                     idUrl={this.state.id}
@@ -215,7 +221,9 @@ export default class MainPage extends Component {
             <section className="map-container">
               {/* Return a div with ref='map' and style.*/}
               {this.state.mapError ? (
-                <div className="error" role="alert">Google Map could not load. Plese try again later.</div>
+                <div className="error" role="alert">
+                  Google Map could not load. Plese try again later.
+                </div>
               ) : (
                 <div className="map" ref="map" role="application" style={style}>
                   loading map...

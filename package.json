@@ -2,6 +2,7 @@
   "name": "neighborhood-map-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nraovic.github.io/neighborhood-map-app/",
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
@@ -9,6 +10,7 @@
     "@fortawesome/react-fontawesome": "0.1.0-11",
     "create-react-ref": "^0.1.0",
     "escape-string-regexp": "^1.0.5",
+    "gh-pages": "^1.2.0",
     "google-map-react": "^1.0.3",
     "google-maps-react": "^1.1.0",
     "immutability-helper": "^2.7.0",
@@ -22,6 +24,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

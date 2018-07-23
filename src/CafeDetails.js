@@ -11,6 +11,7 @@ export default class CafeDetails extends Component {
     updateCafesDetails(idUrl);
   }
   render() {
+    const url = process.env.PUBLIC_URL + '/';
     const { idUrl, cafesDetails, apiRequest } = this.props;
     // Get url for the cafe's photo
     const photoUrl = url => {
@@ -47,7 +48,7 @@ export default class CafeDetails extends Component {
     }
     return (
       <div className="details" role="complementary">
-        <Link className="back-link" to="/">
+        <Link className="back-link" to={url}>
           Go back to results
         </Link>
         {/*Handle a fail from Foursquare API*/}
@@ -107,7 +108,7 @@ export default class CafeDetails extends Component {
             </div>
             <p className="foursquare-link">
               The info aboout the cafe has been obtained from Foursquare. For more details please visit
-              <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef'}}>
+              <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef' }}>
                 the Foursquare Page
               </a>
             </p>
