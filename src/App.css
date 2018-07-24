@@ -97,7 +97,23 @@ a:active {
 .hamburger-btn {
   display: none;
 }
+.foursquare-link {
+  font-style: oblique;
+  clear: both;
+  margin: 0;
+  padding-top: 10px;
+}
+.cafe-days {
+  float: left;
+}
+.cafe-times {
+  float: right;
+}
 
+.days-times {
+  width: 80%;
+  clear: both;
+}
 @media (max-width: 768px) {
   .title {
     font-size: 28px;
@@ -144,7 +160,8 @@ a:active {
   }
 }
 @media (max-width: 424px) {
-  .title, .hamburger-btn {
+  .title,
+  .hamburger-btn {
     font-size: 24px;
   }
   .hamburger-btn {

@@ -96,7 +96,7 @@ export default class CafeDetails extends Component {
             <div className="cafe-hours">
               {timeFrames &&
                 timeFrames.map((frame, index) => (
-                  <div key={index}>
+                  <div className="days-times" key={index}>
                     <span className="cafe-days">{frame.days}:</span>
                     {frame.open.map((time, index) => (
                       <span key={index} className="cafe-times">
@@ -107,8 +107,8 @@ export default class CafeDetails extends Component {
                 ))}
             </div>
             <p className="foursquare-link">
-              The info aboout the cafe has been obtained from Foursquare. For more details please visit
-              <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef' }}>
+              The info about the cafe has been obtained from Foursquare. For more details please visit
+              <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef', marginLeft: '7px' }}>
                 the Foursquare Page
               </a>
             </p>
