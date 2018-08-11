@@ -8,14 +8,26 @@
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
+//Add notification when new content is available
+const addUpdateContentNotification = () => {
+  const div = document.createElement('div');
+  const btn = document.createElement('button');
+  btn.textContent = 'DISMISS';
+  div.textContent = 'Refresh the page for the latest content'; // Create a text node
+  div.className = 'toster';
+  btn.className = 'toster-btn';
+  document.body.appendChild(div);
+  div.appendChild(btn);
+  btn.addEventListener('click', function() {
+    div.className = 'toster-dismiss';
+  });
+};
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
     window.location.hostname === '[::1]' ||
     // 127.0.0.1/8 is considered localhost for IPv4.
-    window.location.hostname.match(
-      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
+    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
 );
 
 export default function register() {
@@ -65,6 +77,7 @@ function registerValidSW(swUrl) {
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
+              addUpdateContentNotification();
               console.log('New content is available; please refresh.');
             } else {
               // At this point, everything has been precached.
@@ -86,10 +99,7 @@ function checkValidServiceWorker(swUrl) {
   fetch(swUrl)
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
-      if (
-        response.status === 404 ||
-        response.headers.get('content-type').indexOf('javascript') === -1
-      ) {
+      if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {
@@ -102,9 +112,7 @@ function checkValidServiceWorker(swUrl) {
       }
     })
     .catch(() => {
-      console.log(
-        'No internet connection found. App is running in offline mode.'
-      );
+      console.log('No internet connection found. App is running in offline mode.');
     });
 }
 

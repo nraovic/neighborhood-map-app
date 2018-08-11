@@ -137,11 +137,7 @@ export default class MainPage extends Component {
   renderRedirect = () => {
     if (this.state.redirect) {
       return (
-        <Redirect
-          from={process.env.PUBLIC_URL + '/'}
-          push
-          to={process.env.PUBLIC_URL + `/details/${this.state.id}`}
-        />
+        <Redirect from={process.env.PUBLIC_URL + '/'} push to={process.env.PUBLIC_URL + `/details/${this.state.id}`} />
       );
     }
   };

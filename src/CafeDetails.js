@@ -107,7 +107,7 @@ export default class CafeDetails extends Component {
                 ))}
             </div>
             <p className="foursquare-link">
-              The info about the cafe has been obtained from Foursquare. For more details please visit
+              The info about this cafe has been obtained from Foursquare. For more details visit
               <a href={foursquareUrl} target="_blank" style={{ color: '#8ac6ef', marginLeft: '7px' }}>
                 the Foursquare Page
               </a>

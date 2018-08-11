@@ -16,7 +16,21 @@ a:active {
   text-decoration: none;
   color: black;
 }
-
+.toster {
+  z-index: 1;
+  position: fixed;
+  bottom: 30px;
+  left: 10px;
+  background-color: #696969;
+  padding: 20px;
+}
+.toster-dismiss {
+  visibility: hidden;
+}
+.toster-btn {
+  display: inline;
+  margin-left: 10px;
+}
 .title {
   position: relative;
   margin-right: 10px;
@@ -108,11 +122,13 @@ a:active {
 }
 .cafe-times {
   float: right;
+  vertical-align: text-bottom;
 }
 
 .days-times {
   width: 80%;
-  clear: both;
+  overflow: auto;
+  vertical-align: text-bottom;
 }
 @media (max-width: 768px) {
   .title {
@@ -131,6 +147,9 @@ a:active {
     color: #ff9900;
     border: 0;
     border-radius: 2px;
+  }
+  .days-times {
+    width: 100%;
   }
   .map-container {
     width: 100%;
